@@ -1,0 +1,15 @@
+Language:        Cpp
+BasedOnStyle:    Google
+ColumnLimit : 120
+
+AccessModifierOffset: -2
+ContinuationIndentWidth: 8
+IndentWidth:     4
+
+DerivePointerAlignment: false
+
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackArguments: false
+BinPackParameters: false
+
+AllowShortFunctionsOnASingleLine: Inline
