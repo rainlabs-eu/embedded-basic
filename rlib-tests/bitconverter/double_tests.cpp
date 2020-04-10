@@ -1,9 +1,7 @@
-#include "rlib/types/types.h"
-#include "rlib/utils/math/modulo_index.hpp"
+#include "rlib/bitconverter.h"
+
 #include <cfloat>
 #include <gmock/gmock.h>
-#include <cmath>
-#include <cstdint>
 #include <vector>
 
 using namespace::testing;
