@@ -13,11 +13,20 @@ repos:
       rev: 0.0.8 # or higher tag
       hooks:
           - id: yamlfmt
-    - repo: https://github.com/pocc/pre-commit-hooks
-      rev: v1.1.0
+    - repo: local
       hooks:
           - id: clang-format
-            args: [-i]
-#          - id: clang-tidy
-#            require_serial: true
-#            args: [-fix, -p cmake-build-debug/compile_commands.json, --format-style=file]
+            name: Run Clang Format
+            files: \.[ch](pp|xx|\+\+)?$
+            language: system
+            entry: clang-format
+            args: [-style=file, -i]
+          - id: clang-tidy
+            name: Run Clang Tidy
+            files: \.[c](pp|xx|\+\+)?$
+            language: system
+            verbose: true
+            entry: >
+                bash -c '
+                BUILD=$(find -type f -name compile_commands.json -printf "%h" -quit)
+                && clang-tidy -p "$BUILD" -fix "$0" "$@"'
