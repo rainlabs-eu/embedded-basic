@@ -14,7 +14,10 @@ repos:
       hooks:
           - id: yamlfmt
     - repo: https://github.com/pocc/pre-commit-hooks
-      rev: python
+      rev: v1.1.0
       hooks:
           - id: clang-format
             args: [-i]
+#          - id: clang-tidy
+#            require_serial: true
+#            args: [-fix, -p cmake-build-debug/compile_commands.json, --format-style=file]

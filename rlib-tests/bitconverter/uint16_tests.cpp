@@ -15,12 +15,12 @@ struct Uint16TestCase {
 
 struct RlibUtilsBitconverterUint16ParamTests : public TestWithParam<Uint16TestCase> {};
 
-INSTANTIATE_TEST_CASE_P(RlibUtilsBitconverterUint16,
-                        RlibUtilsBitconverterUint16ParamTests,
-                        ::testing::Values(Uint16TestCase{0x0000, 0x00, 0x00},
-                                          Uint16TestCase{0xFFFF, 0xFF, 0xFF},
-                                          Uint16TestCase{0x0102, 0x01, 0x02},
-                                          Uint16TestCase{0x4A3B, 0x4A, 0x3B}));
+INSTANTIATE_TEST_SUITE_P(RlibUtilsBitconverterUint16,
+                         RlibUtilsBitconverterUint16ParamTests,
+                         ::testing::Values(Uint16TestCase{0x0000, 0x00, 0x00},
+                                           Uint16TestCase{0xFFFF, 0xFF, 0xFF},
+                                           Uint16TestCase{0x0102, 0x01, 0x02},
+                                           Uint16TestCase{0x4A3B, 0x4A, 0x3B}));
 
 TEST_P(RlibUtilsBitconverterUint16ParamTests, CanRetrieveSingleBytesFromNumber) {
     const auto test = GetParam();

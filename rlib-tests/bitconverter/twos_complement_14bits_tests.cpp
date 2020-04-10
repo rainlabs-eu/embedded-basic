@@ -14,13 +14,13 @@ struct TwosComplement14BitsTestCase {
 
 struct RlibUtilsBitconverterTwosComplement14BitsParamTests : public TestWithParam<TwosComplement14BitsTestCase> {};
 
-INSTANTIATE_TEST_CASE_P(RlibUtilsBitconverterTwosComplement14Bits,
-                        RlibUtilsBitconverterTwosComplement14BitsParamTests,
-                        ::testing::Values(TwosComplement14BitsTestCase{0, 0},
-                                          TwosComplement14BitsTestCase{1, 1},
-                                          TwosComplement14BitsTestCase{-1, 0x3FFF},
-                                          TwosComplement14BitsTestCase{-8192, 0x2000},
-                                          TwosComplement14BitsTestCase{8191, 0x1FFF}));
+INSTANTIATE_TEST_SUITE_P(RlibUtilsBitconverterTwosComplement14Bits,
+                         RlibUtilsBitconverterTwosComplement14BitsParamTests,
+                         ::testing::Values(TwosComplement14BitsTestCase{0, 0},
+                                           TwosComplement14BitsTestCase{1, 1},
+                                           TwosComplement14BitsTestCase{-1, 0x3FFF},
+                                           TwosComplement14BitsTestCase{-8192, 0x2000},
+                                           TwosComplement14BitsTestCase{8191, 0x1FFF}));
 
 TEST_P(RlibUtilsBitconverterTwosComplement14BitsParamTests, ValidConversionResult) {
     const auto test = GetParam();

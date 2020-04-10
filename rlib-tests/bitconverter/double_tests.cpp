@@ -41,7 +41,7 @@ TEST_P(RlibUtilsBitconverterDoubleParamTests, CanCreateNumberFromBytesArrayFromB
     EXPECT_THAT(result, DoubleEq(test.expected_double_value));
 }
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
         RlibUtilsBitconverterDouble,
         RlibUtilsBitconverterDoubleParamTests,
         ::testing::Values(DoubleTestCase{DBL_MAX, 0x7F, 0xEF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},

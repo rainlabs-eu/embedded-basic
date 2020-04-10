@@ -17,11 +17,11 @@ struct Uint32TestCase {
 
 struct RlibUtilsBitconverterUint32ParamTests : public TestWithParam<Uint32TestCase> {};
 
-INSTANTIATE_TEST_CASE_P(RlibUtilsBitconverterUint32,
-                        RlibUtilsBitconverterUint32ParamTests,
-                        ::testing::Values(Uint32TestCase{0x00000000, 0x00, 0x00, 0x00, 0x00},
-                                          Uint32TestCase{0x01020304, 0x01, 0x02, 0x03, 0x04},
-                                          Uint32TestCase{0x4A3B2C1D, 0x4A, 0x3B, 0x2C, 0x1D}));
+INSTANTIATE_TEST_SUITE_P(RlibUtilsBitconverterUint32,
+                         RlibUtilsBitconverterUint32ParamTests,
+                         ::testing::Values(Uint32TestCase{0x00000000, 0x00, 0x00, 0x00, 0x00},
+                                           Uint32TestCase{0x01020304, 0x01, 0x02, 0x03, 0x04},
+                                           Uint32TestCase{0x4A3B2C1D, 0x4A, 0x3B, 0x2C, 0x1D}));
 
 TEST_P(RlibUtilsBitconverterUint32ParamTests, CanRetrieveSingleBytesFromNumberTestCases) {
     const auto test = GetParam();
