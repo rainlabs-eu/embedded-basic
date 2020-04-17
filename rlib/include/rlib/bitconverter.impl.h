@@ -13,7 +13,10 @@ static inline uint16_t uint16_t_from_bytes(const uint8_t msb, const uint8_t lsb)
 static inline uint16_t uint16_t_from_be_table(const uint8_t* betable) {
     return uint16_t_from_bytes(betable[0], betable[1]);
 }
-
+static inline void uint16_t_to_be_table(uint16_t value, uint8_t* betable) {
+    betable[0] = uint16_t_get_msb(value);
+    betable[1] = uint16_t_get_lsb(value);
+}
 static inline uint16_t uint16_t_from_le_table(const uint8_t* letable) {
     return uint16_t_from_bytes(letable[1], letable[0]);
 }
@@ -115,6 +118,10 @@ static inline uint32_t uint32_t_from_uint16_t(uint16_t mshw, uint16_t lshw) {
     return ((uint32_t)mshw << 16) | lshw;
 }
 
+static inline uint64_t uint64_t_from_be_table(const uint8_t* betable) {
+    return uint64_from_bytes(
+            betable[0], betable[1], betable[2], betable[3], betable[4], betable[5], betable[6], betable[7]);
+}
 static inline uint64_t uint64_from_bytes(const uint8_t mmm_sb,
                                          const uint8_t mml_sb,
                                          const uint8_t mlm_sb,
@@ -127,6 +134,43 @@ static inline uint64_t uint64_from_bytes(const uint8_t mmm_sb,
                       ((uint64_t)mll_sb) << 32 | ((uint64_t)lmm_sb) << 24 | ((uint64_t)lml_sb) << 16 |
                       ((uint64_t)llm_sb) << 8 | ((uint64_t)lll_sb);
     return result;
+}
+static inline void uint64_t_to_be_table(uint64_t value, uint8_t* betable) {
+    betable[0] = (value >> 56) & 0xFF;
+    betable[1] = (value >> 48) & 0xFF;
+    betable[2] = (value >> 40) & 0xFF;
+    betable[3] = (value >> 32) & 0xFF;
+    betable[4] = (value >> 24) & 0xFF;
+    betable[5] = (value >> 16) & 0xFF;
+    betable[6] = (value >> 8) & 0xFF;
+    betable[7] = (value >> 0) & 0xFF;
+}
+
+static inline uint64_t uint64_t_from_be_range(const uint8_t* betable, size_t bytes_to_read) {
+    uint64_t ret_val = 0;
+    int i = 0;
+    for (; i < bytes_to_read; ++i) {
+        ret_val <<= 8;
+        ret_val |= betable[i];
+    }
+    return ret_val;
+}
+
+static inline void uint64_t_to_be_range(uint64_t value, uint8_t* betable, size_t bytes_to_write) {
+    int i = bytes_to_write - 1;
+    for (; i >= 0; --i) {
+        betable[i] = value & 0xFF;
+        value >>= 8;
+    }
+}
+
+static inline uint8_t uint64_t_storage_bytes_needed(uint64_t value) {
+    uint8_t bytes_to_store_value = 0;
+    do {
+        value >>= 8;
+        bytes_to_store_value++;
+    } while (value > 0);
+    return bytes_to_store_value;
 }
 
 static inline int16_t twos_complement_from_raw_12bits(uint16_t u2_raw_value) {
