@@ -31,7 +31,7 @@ jobs:
             os: macos-latest,
             build_type: "Release", cc: "clang", cxx: "clang++"
           }
-      steps:
-        - name: 'Sanity check'
-          run: |
-            ls
+    steps:
+      - name: 'Sanity check'
+        run: |
+          ls
