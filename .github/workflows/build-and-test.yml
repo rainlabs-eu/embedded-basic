@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.1.0
-      - name: 'Sanity check'
+        with:
+          path: source
+          submodules: true
+      - name: 'CMake Configure'
         run: |
-          ls
+          cmake -S source/ -B build/
