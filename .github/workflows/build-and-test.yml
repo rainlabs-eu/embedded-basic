@@ -1,13 +1,9 @@
-name: CMake Build Matrix
+name: CMake Quality Assurance
 
 on: [push, pull_request]
 
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        cc: [ gcc, clang ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
