@@ -13,4 +13,4 @@ jobs:
       - uses: actions/checkout@master
         with:
           submodules: true
-      - uses: rainlabs-eu/cmake-quality-action@v1.0.0-alpha
+      - uses: rainlabs-eu/cmake-quality-action@master
