@@ -42,6 +42,6 @@ INSTANTIATE_TEST_SUITE_P(RlibUtilsBitconverterFloat,
                          ::testing::Values(FloatTestCase{FLT_MAX, 0x7F, 0x7F, 0xFF, 0xFF},
                                            FloatTestCase{FLT_MIN, 0x00, 0x80, 0x00, 0x00},
                                            FloatTestCase{FLT_EPSILON, 0x34, 0x00, 0x00, 0x00},
-                                           FloatTestCase{M_PI, 0x40, 0x49, 0x0F, 0xDB}));
+                                           FloatTestCase{3.14159265358979323846, 0x40, 0x49, 0x0F, 0xDB}));
 
 }  // end namespace
