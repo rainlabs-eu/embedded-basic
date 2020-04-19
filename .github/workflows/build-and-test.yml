@@ -5,8 +5,9 @@ on: [push, pull_request]
 jobs:
   build:
     strategy:
-        matrix:
-          cc: [ gcc, clang ]
+      fail-fast: false
+      matrix:
+        cc: [ gcc, clang ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -36,13 +37,14 @@ jobs:
   clang-sanitizers:
     name: build with clang -fsanitize
     strategy:
-        matrix:
-          cflags:
-            - -fsanitize=address
-            - -fsanitize=memory
-            - -fsanitize=undefined
-            - -fsanitize=dataflow
-            - -fsanitize=safe-stack
+      fail-fast: false
+      matrix:
+        cflags:
+          - -fsanitize=address
+          - -fsanitize=memory
+          - -fsanitize=undefined
+          - -fsanitize=dataflow
+          - -fsanitize=safe-stack
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
