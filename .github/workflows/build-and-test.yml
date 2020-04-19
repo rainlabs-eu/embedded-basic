@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        with:
+          submodules: true
       - uses: docker://lpenz/ghaction-cmake:latest
         with:
           cc: ${{ matrix.cc }}
@@ -50,24 +52,6 @@ jobs:
         with:
           cc: clang
           cflags: ${{ matrix.cflags }}
-  clang-format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-        with:
-          submodules: true
-      - uses: docker://lpenz/ghaction-cmake:latest
-        with:
-          analyzer: clang-format
-  clang-analyzers:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-        with:
-          submodules: true
-      - uses: docker://lpenz/ghaction-cmake:latest
-        with:
-          analyzer: clang-tidy
   omnilint:
     runs-on: ubuntu-latest
     steps:
