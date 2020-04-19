@@ -1,5 +1,7 @@
 project(rlib-tests)
+enable_testing()
 
+set(INSTALL_GTEST OFF CACHE BOOL "")
 add_subdirectory(googletest)
 
 file(GLOB_RECURSE SRC CONFIGURE_DEPENDS bitconverter/*.cpp)
