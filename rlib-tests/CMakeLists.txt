@@ -1,5 +1,4 @@
 project(rlib-tests)
-enable_testing()
 
 set(INSTALL_GTEST OFF CACHE BOOL "")
 add_subdirectory(googletest)
