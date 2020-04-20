@@ -1,4 +1,4 @@
-name: CMake Quality Assurance
+name: CMake Quality Check
 
 on: [push, pull_request]
 
