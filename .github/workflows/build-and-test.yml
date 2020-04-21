@@ -11,4 +11,4 @@ jobs:
           submodules: true
       - uses: rainlabs-eu/ghaction-cmake-quality@master
         with:
-          cmake_configure_environment: "CC=clang-9 CXX=clang++9"
+          cmake_configure_environment: "CC=clang-9 CXX=clang++-9"
