@@ -9,6 +9,6 @@ jobs:
       - uses: actions/checkout@master
         with:
           submodules: true
-      - uses: rainlabs-eu/cmake-quality-action@master
+      - uses: rainlabs-eu/ghaction-cmake-quality@master
         with:
           cmake_configure_environemnt: "CC=clang-9 CXX=clang++9"
