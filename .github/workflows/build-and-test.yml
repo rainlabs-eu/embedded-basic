@@ -10,13 +10,10 @@ jobs:
       matrix:
         cmake_environment:
           [
-            "CC=clang-4.0 CXX=clang++-4.0 CXX_FLAGS=-std=c++11",
-            "CC=clang-5.0 CXX=clang++-5.0 CXX_FLAGS=-std=c++11",
             "CC=clang-6.0 CXX=clang++-6.0",
             "CC=clang-7 CXX=clang++-7",
             "CC=clang-8 CXX=clang++-8",
             "CC=clang-9 CXX=clang++-9",
-            "CC=gcc-5 CXX=g++-5",
             "CC=gcc-6 CXX=g++-6",
             "CC=gcc-7 CXX=g++-7",
             "CC=gcc-8 CXX=g++-8",
