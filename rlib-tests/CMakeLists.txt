@@ -3,7 +3,7 @@ project(rlib-tests)
 set(INSTALL_GTEST OFF CACHE BOOL "")
 add_subdirectory(googletest)
 
-file(GLOB_RECURSE SRC CONFIGURE_DEPENDS bitconverter/*.cpp)
+file(GLOB_RECURSE SRC CONFIGURE_DEPENDS src/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SRC})
 target_link_libraries(${PROJECT_NAME} rlib)
