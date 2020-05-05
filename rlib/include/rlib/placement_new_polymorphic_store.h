@@ -55,9 +55,9 @@ class PlacementNewPolymorphicStore {
 
   private:
     typename std::aligned_storage<detail::max_sizeof<AllowedChildTypes...>(),
-                                  detail::max_alignof<AllowedChildTypes...>()>::type m_data;
+                                  detail::max_alignof<AllowedChildTypes...>()>::type data_;
 
-    detail::PlacementNewStorageBase m_storage_base;
+    detail::PlacementNewStorageBase storage_;
 
   public:
     template <typename ChildType, typename... CtorParamsType>
@@ -65,7 +65,7 @@ class PlacementNewPolymorphicStore {
 
     void Destroy();
 
-    BaseType* get();
+    BaseType* Get();
 
     ~PlacementNewPolymorphicStore();
 };
@@ -75,30 +75,30 @@ template <typename ChildType, typename... CtorParamsType>
 inline ChildType* PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::Create(CtorParamsType... ctor_params) {
     static_assert(detail::is_within_list<ChildType, AllowedChildTypes...>(),
                   "Created type must be one of allowed child types");
-    m_storage_base.AssertIsInvalid();
+    storage_.AssertIsInvalid();
 
-    ChildType* ptr = new (&m_data) ChildType(ctor_params...);
+    ChildType* ptr = new (&data_) ChildType(ctor_params...);
     BaseType* base = ptr;
-    m_storage_base.SetValid(base);
+    storage_.SetValid(base);
 
     return ptr;
 }
 
 template <class BaseType, class... AllowedChildTypes>
 inline void PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::Destroy() {
-    BaseType* valid = get();
+    BaseType* valid = Get();
     valid->~BaseType();
-    m_storage_base.Invalidate();
+    storage_.Invalidate();
 }
 
 template <class BaseType, class... AllowedChildTypes>
-inline BaseType* PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::get() {
-    return reinterpret_cast<BaseType*>(m_storage_base.GetValid());
+inline BaseType* PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::Get() {
+    return reinterpret_cast<BaseType*>(storage_.GetValid());
 }
 
 template <class BaseType, class... AllowedChildTypes>
 inline PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::~PlacementNewPolymorphicStore() {
-    if (m_storage_base.IsValid()) {
+    if (storage_.IsValid()) {
         Destroy();
     }
 }

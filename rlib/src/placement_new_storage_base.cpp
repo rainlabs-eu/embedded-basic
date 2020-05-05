@@ -3,25 +3,25 @@
 #include <cassert>
 
 void rlib::detail::PlacementNewStorageBase::SetValid(void* constructed) {
-    assert(m_constructed == nullptr);
+    assert(constructed_ == nullptr);
     assert(constructed != nullptr);
 
-    m_constructed = constructed;
+    constructed_ = constructed;
 }
 
 void rlib::detail::PlacementNewStorageBase::Invalidate() {
-    m_constructed = nullptr;
+    constructed_ = nullptr;
 }
 
 void* rlib::detail::PlacementNewStorageBase::GetValid() const {
     assert(IsValid());
-    return m_constructed;
+    return constructed_;
 }
 
 void rlib::detail::PlacementNewStorageBase::AssertIsInvalid() {
-    assert(m_constructed == nullptr);
+    assert(constructed_ == nullptr);
 }
 
 bool rlib::detail::PlacementNewStorageBase::IsValid() const {
-    return m_constructed != nullptr;
+    return constructed_ != nullptr;
 }

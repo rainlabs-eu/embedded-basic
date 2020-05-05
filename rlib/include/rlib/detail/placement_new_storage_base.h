@@ -13,10 +13,10 @@ namespace detail {
  */
 class PlacementNewStorageBase {
   private:
-    void* m_constructed;
+    void* constructed_;
 
   public:
-    PlacementNewStorageBase() : m_constructed(nullptr) {}
+    PlacementNewStorageBase() : constructed_(nullptr) {}
 
     void AssertIsInvalid();
     void SetValid(void* constructed);

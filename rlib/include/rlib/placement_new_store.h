@@ -7,7 +7,7 @@ class PlacementNewStore {
   private:
     typename std::aligned_storage<sizeof(T), alignof(T)>::type m_data;
 
-    detail::PlacementNewStorageBase m_storage_base;
+    detail::PlacementNewStorageBase storage_;
 
   public:
     template <typename... CtorParamsType>
@@ -25,9 +25,9 @@ template <typename... CtorParamsType>
 inline T* PlacementNewStore<T>::Create(CtorParamsType... ctor_params) {
     static_assert(std::is_constructible<T, CtorParamsType...>::value,
                   "Underlying object's constructor parameter types must match this type's template parameters");
-    m_storage_base.AssertIsInvalid();
+    storage_.AssertIsInvalid();
     auto* ptr = new (&m_data) T(ctor_params...);
-    m_storage_base.SetValid(ptr);
+    storage_.SetValid(ptr);
     return Get();
 }
 
@@ -35,19 +35,19 @@ template <class T>
 inline void PlacementNewStore<T>::Destroy() {
     T* valid = Get();
     valid->~T();
-    m_storage_base.Invalidate();
+    storage_.Invalidate();
 }
 
 template <class T>
 inline PlacementNewStore<T>::~PlacementNewStore() {
-    if (m_storage_base.IsValid()) {
+    if (storage_.IsValid()) {
         Destroy();
     }
 }
 
 template <class T>
 inline T* PlacementNewStore<T>::Get() {
-    return reinterpret_cast<T*>(m_storage_base.GetValid());
+    return reinterpret_cast<T*>(storage_.GetValid());
 }
 
 }  // namespace rlib
