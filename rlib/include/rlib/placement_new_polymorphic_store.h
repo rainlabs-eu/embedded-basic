@@ -1,6 +1,7 @@
 #pragma once
 #include "detail/placement_new_storage_base.h"
 
+#include <cstddef>
 #include <type_traits>
 
 namespace rlib {
