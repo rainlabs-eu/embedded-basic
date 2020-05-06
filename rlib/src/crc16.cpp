@@ -1,7 +1,11 @@
 #include "crc16.h"
+#include <cassert>
 
 // First variant of crc16 based on lookup tables, table indexed using low byte
 static inline uint16_t crc16_low(const uint16_t* lookup, const void* data, size_t length, uint16_t last_chunk_crc) {
+    assert(lookup);
+    assert(data);
+
     uint16_t crc_word = last_chunk_crc;
     const uint8_t* bdata = (const uint8_t*)data;
     while (length--) {
@@ -14,6 +18,9 @@ static inline uint16_t crc16_low(const uint16_t* lookup, const void* data, size_
 
 // Second variant of crc16 based on lookup tables, table indexed using high byte
 static inline uint16_t crc16_high(const uint16_t* lookup, const void* data, size_t length, uint16_t last_chunk_crc) {
+    assert(lookup);
+    assert(data);
+
     uint16_t crc_word = last_chunk_crc;
     const uint8_t* bdata = (const uint8_t*)data;
     while (length--) {
