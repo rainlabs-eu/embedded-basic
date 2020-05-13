@@ -32,8 +32,23 @@ jobs:
       - uses: actions/checkout@master
         with:
           submodules: true
-      - name: Install dependencies on windows
+      - name: Install dependencies
         run: |
           choco install ninja cmake
           ninja --version
           cmake --version
+      - name: Configure
+        shell: bash
+        run: |
+          mkdir build
+          cmake \
+            -S . \
+            -B build \
+      - name: Build
+        shell: bash
+        run: cmake --build build
+      - name: Test
+        shell: bash
+        run: |
+          cd build
+          ctest .
