@@ -3,7 +3,7 @@ name: CMake Quality Check
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-linux:
     name: "Build and Test"
     strategy:
       fail-fast: false
@@ -26,3 +26,14 @@ jobs:
       - uses: rainlabs-eu/ghaction-cmake-quality@master
         with:
           cmake_configure_environment: ${{ matrix.cmake_environment }}
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          submodules: true
+      - name: Install dependencies on windows
+        run: |
+          choco install ninja cmake
+          ninja --version
+          cmake --version
