@@ -49,6 +49,13 @@ constexpr bool are_children_of() {
 
 }  // namespace detail
 
+/*!
+ * Handles memory storage for creating objects of types inheriting BaseType,
+ * Excplicitely listed as possible variants.
+ *
+ * Object of this class *maintains actual ownership*, and its API enforces
+ * correct sequence of use (Create, NxGet, Destroy).
+ */
 template <class BaseType, class... AllowedChildTypes>
 class PlacementNewPolymorphicStore {
     static_assert(detail::are_children_of<BaseType, AllowedChildTypes...>(), "");

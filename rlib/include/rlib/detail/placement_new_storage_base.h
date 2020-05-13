@@ -19,6 +19,8 @@ class PlacementNewStorageBase {
     PlacementNewStorageBase() : constructed_(nullptr) {}
 
     void AssertIsInvalid();
+    void AssertIsValid();
+
     void SetValid(void* constructed);
     void Invalidate();
 

@@ -2,8 +2,15 @@
 #include "detail/placement_new_storage_base.h"
 
 namespace rlib {
+
+/*!
+ * Handles memory storage for creating objects of single type T
+ *
+ * Object of this class *maintains actual ownership*, and its API enforces
+ * correct sequence of use (Create, NxGet, Destroy).
+ */
 template <class T>
-class PlacementNewStore {
+class PlacementNewTypedStore {
   private:
     typename std::aligned_storage<sizeof(T), alignof(T)>::type m_data;
 
@@ -17,12 +24,12 @@ class PlacementNewStore {
 
     void Destroy();
 
-    ~PlacementNewStore();
+    ~PlacementNewTypedStore();
 };
 
 template <class T>
 template <typename... CtorParamsType>
-inline T* PlacementNewStore<T>::Create(CtorParamsType... ctor_params) {
+inline T* PlacementNewTypedStore<T>::Create(CtorParamsType... ctor_params) {
     static_assert(std::is_constructible<T, CtorParamsType...>::value,
                   "Underlying object's constructor parameter types must match this type's template parameters");
     storage_.AssertIsInvalid();
@@ -32,21 +39,21 @@ inline T* PlacementNewStore<T>::Create(CtorParamsType... ctor_params) {
 }
 
 template <class T>
-inline void PlacementNewStore<T>::Destroy() {
+inline void PlacementNewTypedStore<T>::Destroy() {
     T* valid = Get();
     valid->~T();
     storage_.Invalidate();
 }
 
 template <class T>
-inline PlacementNewStore<T>::~PlacementNewStore() {
+inline PlacementNewTypedStore<T>::~PlacementNewTypedStore() {
     if (storage_.IsValid()) {
         Destroy();
     }
 }
 
 template <class T>
-inline T* PlacementNewStore<T>::Get() {
+inline T* PlacementNewTypedStore<T>::Get() {
     return reinterpret_cast<T*>(storage_.GetValid());
 }
 

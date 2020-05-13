@@ -22,6 +22,10 @@ void rlib::detail::PlacementNewStorageBase::AssertIsInvalid() {
     assert(constructed_ == nullptr);
 }
 
+void rlib::detail::PlacementNewStorageBase::AssertIsValid() {
+    assert(constructed_ != nullptr);
+}
+
 bool rlib::detail::PlacementNewStorageBase::IsValid() const {
     return constructed_ != nullptr;
 }
