@@ -11,13 +11,13 @@ namespace detail {
  * Class for holding placement new allocation results
  * needed mostly to avoid bloat if all asserts are located in template code
  */
-class PlacementNewStorageBase {
+class PlacementNewInstanceStorage {
   private:
     void* constructed_;
 
   public:
-    PlacementNewStorageBase() : constructed_(nullptr) {}
-
+    PlacementNewInstanceStorage() : constructed_(nullptr) {}
+    ~PlacementNewInstanceStorage() { AssertIsInvalid(); }
     void AssertIsInvalid();
     void AssertIsValid();
 

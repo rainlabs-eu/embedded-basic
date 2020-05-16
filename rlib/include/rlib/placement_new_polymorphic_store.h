@@ -1,5 +1,5 @@
 #pragma once
-#include "detail/placement_new_storage_base.h"
+#include "detail/placement_new_instance_storage.h"
 
 #include <cstddef>
 #include <type_traits>
@@ -51,42 +51,41 @@ constexpr bool are_children_of() {
 
 /*!
  * Handles memory storage for creating objects of types inheriting BaseType,
- * Excplicitely listed as possible variants.
+ * Explicitly listed as possible variants.
  *
  * Object of this class *maintains actual ownership*, and its API enforces
- * correct sequence of use (Create, NxGet, Destroy).
+ * correct sequence of use (Create, Get, Destroy).
  */
 template <class BaseType, class... AllowedChildTypes>
 class PlacementNewPolymorphicStore {
     static_assert(detail::are_children_of<BaseType, AllowedChildTypes...>(), "");
 
-  private:
-    typename std::aligned_storage<detail::max_sizeof<AllowedChildTypes...>(),
-                                  detail::max_alignof<AllowedChildTypes...>()>::type data_;
-
-    detail::PlacementNewStorageBase storage_;
-
   public:
-    template <typename ChildType, typename... CtorParamsType>
-    ChildType* Create(CtorParamsType... ctor_params);
-
-    void Destroy();
-
-    BaseType* Get();
-
     ~PlacementNewPolymorphicStore();
+
+    template <typename ChildType, typename... CtorParamsType>
+    ChildType* Create(CtorParamsType&&... ctor_params);
+    void Destroy();
+    BaseType* Get() const;
+
+  private:
+    using sufficient_storage_t = typename std::aligned_storage<detail::max_sizeof<AllowedChildTypes...>(),
+                                                               detail::max_alignof<AllowedChildTypes...>()>::type;
+    sufficient_storage_t buffer_;
+    detail::PlacementNewInstanceStorage instance_storage_;
 };
 
 template <class BaseType, class... AllowedChildTypes>
 template <typename ChildType, typename... CtorParamsType>
-inline ChildType* PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::Create(CtorParamsType... ctor_params) {
+inline ChildType* PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::Create(
+        CtorParamsType&&... ctor_params) {
     static_assert(detail::is_within_list<ChildType, AllowedChildTypes...>(),
                   "Created type must be one of allowed child types");
-    storage_.AssertIsInvalid();
+    instance_storage_.AssertIsInvalid();
 
-    ChildType* ptr = new (&data_) ChildType(ctor_params...);
+    ChildType* ptr = new (&buffer_) ChildType(std::forward<CtorParamsType>(ctor_params)...);
     BaseType* base = ptr;
-    storage_.SetValid(base);
+    instance_storage_.SetValid(base);
 
     return ptr;
 }
@@ -95,17 +94,17 @@ template <class BaseType, class... AllowedChildTypes>
 inline void PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::Destroy() {
     BaseType* valid = Get();
     valid->~BaseType();
-    storage_.Invalidate();
+    instance_storage_.Invalidate();
 }
 
 template <class BaseType, class... AllowedChildTypes>
-inline BaseType* PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::Get() {
-    return reinterpret_cast<BaseType*>(storage_.GetValid());
+inline BaseType* PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::Get() const {
+    return static_cast<BaseType*>(instance_storage_.GetValid());
 }
 
 template <class BaseType, class... AllowedChildTypes>
 inline PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::~PlacementNewPolymorphicStore() {
-    if (storage_.IsValid()) {
+    if (instance_storage_.IsValid()) {
         Destroy();
     }
 }

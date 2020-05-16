@@ -1,6 +1,7 @@
 #pragma once
+
 #include <cstddef>
-#include "detail/placement_new_storage_base.h"
+#include "detail/placement_new_instance_storage.h"
 
 namespace rlib {
 
@@ -9,34 +10,42 @@ namespace rlib {
  *
  * Since it is not even aware of object type, its user responsibility
  * to maintain actual ownership of created object.
+ *
+ * It still prevents memory reuse and use after destroy scenarios.
  */
 template <size_t size, size_t alignment = alignof(max_align_t)>
 class PlacementNewUniversalStore {
-  protected:
-    typename std::aligned_storage<size, alignment>::type m_data;
-
-    detail::PlacementNewStorageBase storage_;
-
   public:
-    ~PlacementNewUniversalStore() { storage_.AssertIsInvalid(); }
+    ~PlacementNewUniversalStore() = default;
 
     template <class T, typename... CtorParamsType>
-    T* Create(CtorParamsType... ctor_params) {
-        static_assert(std::is_constructible<T, CtorParamsType...>::value,
-                      "Underlying object's constructor parameter types must match this type's template parameters");
-
-        storage_.AssertIsInvalid();
-        auto* ptr = new (&m_data) T(ctor_params...);
-        storage_.SetValid(ptr);
-        return ptr;
-    }
+    T* Create(CtorParamsType&&... ctor_params);
 
     template <class T>
-    void Destroy(T* valid) {
-        storage_.AssertIsValid();
-        valid->~T();
-        storage_.Invalidate();
-    }
+    void Destroy(T* valid);
+
+  private:
+    typename std::aligned_storage<size, alignment>::type buffer_;
+    detail::PlacementNewInstanceStorage instance_storage_;
 };
 
+template <size_t size, size_t alignment>
+template <class T, typename... CtorParamsType>
+T* PlacementNewUniversalStore<size, alignment>::Create(CtorParamsType&&... ctor_params) {
+    static_assert(std::is_constructible<T, CtorParamsType...>::value,
+                  "Underlying object's constructor parameter types must match this type's template parameters");
+
+    instance_storage_.AssertIsInvalid();
+    auto* ptr = new (&buffer_) T(std::forward<CtorParamsType>(ctor_params)...);
+    instance_storage_.SetValid(ptr);
+    return ptr;
+}
+
+template <size_t size, size_t alignment>
+template <class T>
+void PlacementNewUniversalStore<size, alignment>::Destroy(T* valid) {
+    instance_storage_.AssertIsValid();
+    valid->~T();
+    instance_storage_.Invalidate();
+}
 }  // namespace rlib
