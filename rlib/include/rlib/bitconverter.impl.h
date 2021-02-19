@@ -148,8 +148,7 @@ static inline void uint64_t_to_be_table(uint64_t value, uint8_t* betable) {
 
 static inline uint64_t uint64_t_from_be_range(const uint8_t* betable, size_t bytes_to_read) {
     uint64_t ret_val = 0;
-    int i = 0;
-    for (; i < bytes_to_read; ++i) {
+    for (size_t i = 0; i < bytes_to_read; ++i) {
         ret_val <<= 8;
         ret_val |= betable[i];
     }

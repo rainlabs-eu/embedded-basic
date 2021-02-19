@@ -27,17 +27,19 @@ TEST_F(PlacementNewTypedStoreTest, SizeOverheadIsOnePtr) {
 
 TEST_F(PlacementNewTypedStoreTest, CanBeInstantiated) {
     auto* a = store_a.Create();
+    EXPECT_THAT(a, ::testing::NotNull());
     store_a.Destroy();
 }
 
 TEST_F(PlacementNewTypedStoreTest, CannotBeInstantiatedTwiceWithoutDestroy) {
     auto* a = store_a.Create();
-
+    EXPECT_THAT(a, ::testing::NotNull());
     EXPECT_DEATH_IF_SUPPORTED(store_a.Create(), "");
 
     store_a.Destroy();
 
     auto a_again = store_a.Create();
+    EXPECT_THAT(a_again, ::testing::NotNull());
 }
 
 struct PlacementNewPolymorphicStoreTest : public ::testing::Test {
@@ -46,6 +48,7 @@ struct PlacementNewPolymorphicStoreTest : public ::testing::Test {
 
 TEST_F(PlacementNewPolymorphicStoreTest, CanBeInstantiatedChildB) {
     auto b = store_poly.Create<B>();
+    EXPECT_THAT(b, ::testing::NotNull());
 
     EXPECT_DEATH_IF_SUPPORTED(store_poly.Create<C>(), "");
     store_poly.Destroy();
@@ -53,16 +56,19 @@ TEST_F(PlacementNewPolymorphicStoreTest, CanBeInstantiatedChildB) {
 
 TEST_F(PlacementNewPolymorphicStoreTest, CanBeInstantiatedChildC) {
     auto c = store_poly.Create<C>();
+    EXPECT_THAT(c, ::testing::NotNull());
     store_poly.Destroy();
 }
 
 TEST_F(PlacementNewPolymorphicStoreTest, CannotMixTypesWithoutDestroy) {
     auto b = store_poly.Create<B>();
+    EXPECT_THAT(b, ::testing::NotNull());
 
     EXPECT_DEATH_IF_SUPPORTED(store_poly.Create<C>(), "");
     store_poly.Destroy();
 
     auto c = store_poly.Create<C>();
+    EXPECT_THAT(c, ::testing::NotNull());
 }
 
 struct PlacementNewUniversalStoreTest : public ::testing::Test {
