@@ -42,6 +42,7 @@ static inline uint32_t uint32_t_from_uint16_t(uint16_t mshw, uint16_t lshw);
 
 static inline uint32_t uint32_t_from_le_table(const uint8_t* letable);
 static inline uint32_t uint32_t_from_be_table(const uint8_t* betable);
+static inline void uint32_t_to_be_table(uint32_t value, uint8_t* betable);
 
 static inline uint64_t uint64_t_from_be_table(const uint8_t* betable);
 static inline uint64_t uint64_from_bytes(const uint8_t mmm_sb,

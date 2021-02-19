@@ -83,6 +83,13 @@ static inline uint32_t uint32_t_from_be_table(const uint8_t* betable) {
     return uint32_t_from_bytes(betable[0], betable[1], betable[2], betable[3]);
 }
 
+static inline void uint32_t_to_be_table(uint32_t value, uint8_t* betable) {
+    betable[0] = uint32_t_get_mmsb(value);
+    betable[1] = uint32_t_get_mlsb(value);
+    betable[2] = uint32_t_get_lmsb(value);
+    betable[3] = uint32_t_get_llsb(value);
+}
+
 static inline double double_from_be_table(const uint8_t* betable) {
     return double_from_bytes(
             betable[0], betable[1], betable[2], betable[3], betable[4], betable[5], betable[6], betable[7]);
