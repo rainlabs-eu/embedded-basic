@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstddef>
+#include <utility>
+
 #include "detail/placement_new_instance_storage.h"
 
 namespace rlib {
@@ -34,6 +36,7 @@ template <class T, typename... CtorParamsType>
 T* PlacementNewUniversalStore<size, alignment>::Create(CtorParamsType&&... ctor_params) {
     static_assert(std::is_constructible<T, CtorParamsType...>::value,
                   "Underlying object's constructor parameter types must match this type's template parameters");
+    static_assert(sizeof(T) <= size, "Type doesn't fit into buffer_");
 
     instance_storage_.AssertIsInvalid();
     auto* ptr = new (&buffer_) T(std::forward<CtorParamsType>(ctor_params)...);

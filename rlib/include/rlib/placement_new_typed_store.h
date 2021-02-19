@@ -17,7 +17,9 @@ class PlacementNewTypedStore {
     template <typename... CtorParamsType>
     T* Create(CtorParamsType... ctor_params);
     T* Get() const;
+    bool IsValid() const;
     void Destroy();
+    T* operator->() const;
 
   private:
     typename std::aligned_storage<sizeof(T), alignof(T)>::type buffer_;
@@ -53,6 +55,16 @@ inline PlacementNewTypedStore<T>::~PlacementNewTypedStore() {
 template <class T>
 inline T* PlacementNewTypedStore<T>::Get() const {
     return static_cast<T*>(instance_storage_.GetValid());
+}
+
+template <class T>
+bool PlacementNewTypedStore<T>::IsValid() const {
+    return instance_storage_.IsValid();
+}
+
+template <class T>
+inline T* PlacementNewTypedStore<T>::operator->() const {
+    return Get();
 }
 
 }  // namespace rlib
