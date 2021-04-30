@@ -68,6 +68,7 @@ class PlacementNewPolymorphicStore {
     ChildType* Create(CtorParamsType&&... ctor_params);
     void Destroy();
     BaseType* Get() const;
+    BaseType* operator->() const;
 
   private:
     using sufficient_storage_t = typename std::aligned_storage<detail::max_sizeof<AllowedChildTypes...>(),
@@ -108,6 +109,11 @@ inline PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::~PlacementN
     if (instance_storage_.IsValid()) {
         Destroy();
     }
+}
+
+template <class BaseType, class... AllowedChildTypes>
+inline BaseType* PlacementNewPolymorphicStore<BaseType, AllowedChildTypes...>::operator->() const {
+    return Get();
 }
 
 }  // namespace rlib
