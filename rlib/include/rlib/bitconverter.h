@@ -57,6 +57,7 @@ static inline void uint64_t_to_be_table(uint64_t value, uint8_t* betable);
 
 static inline uint64_t uint64_t_from_be_range(const uint8_t* betable, size_t bytes_to_read);
 static inline void uint64_t_to_be_range(uint64_t value, uint8_t* betable, size_t bytes_to_write);
+static inline void uint32_t_to_le_table(uint32_t value, uint8_t* letable);
 static inline uint8_t uint64_t_storage_bytes_needed(uint64_t value);
 
 static inline float float_from_bytes(const uint8_t mm_sb,
@@ -78,5 +79,6 @@ static inline double double_from_be_table(const uint8_t* betable);
 static inline int32_t twos_complement_from_raw_24bits(uint32_t u2_raw_value);
 static inline int16_t twos_complement_from_raw_14bits(uint16_t u2_raw_value);
 static inline int16_t twos_complement_from_raw_12bits(uint16_t u2_raw_value);
+static inline uint8_t min_bytes_to_store_value(uint64_t value);
 
 #include "bitconverter.impl.h"

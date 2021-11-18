@@ -170,6 +170,13 @@ static inline void uint64_t_to_be_range(uint64_t value, uint8_t* betable, size_t
     }
 }
 
+static inline void uint32_t_to_le_table(uint32_t value, uint8_t* letable) {
+    letable[0] = uint32_t_get_llsb(value);
+    letable[1] = uint32_t_get_lmsb(value);
+    letable[2] = uint32_t_get_mlsb(value);
+    letable[3] = uint32_t_get_mmsb(value);
+}
+
 static inline uint8_t uint64_t_storage_bytes_needed(uint64_t value) {
     uint8_t bytes_to_store_value = 0;
     do {
@@ -188,4 +195,13 @@ static inline int16_t twos_complement_from_raw_12bits(uint16_t u2_raw_value) {
     } else {
         return u2_raw_value - (UINT12_MAX + 1);
     }
+}
+
+static inline uint8_t min_bytes_to_store_value(uint64_t value) {
+    uint8_t bytes_to_store_value = 0;
+    do {
+        value >>= 8;
+        bytes_to_store_value++;
+    } while (value > 0);
+    return bytes_to_store_value;
 }
