@@ -13,6 +13,7 @@ static inline uint16_t uint16_t_from_bytes(const uint8_t msb, const uint8_t lsb)
 static inline uint16_t uint16_t_from_be_table(const uint8_t* betable) {
     return uint16_t_from_bytes(betable[0], betable[1]);
 }
+
 static inline void uint16_t_to_be_table(uint16_t value, uint8_t* betable) {
     betable[0] = uint16_t_get_msb(value);
     betable[1] = uint16_t_get_lsb(value);
@@ -163,9 +164,8 @@ static inline uint64_t uint64_t_from_be_range(const uint8_t* betable, size_t byt
 }
 
 static inline void uint64_t_to_be_range(uint64_t value, uint8_t* betable, size_t bytes_to_write) {
-    int i = bytes_to_write - 1;
-    for (; i >= 0; --i) {
-        betable[i] = value & 0xFF;
+    for (; bytes_to_write != 0; --bytes_to_write) {
+        betable[bytes_to_write - 1] = value & 0xFF;
         value >>= 8;
     }
 }
