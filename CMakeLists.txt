@@ -3,7 +3,11 @@ project("rlib-interation")
 
 
 if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-  add_compile_options(-Wall -Wextra -Werror)
+  if(NOT MSVC)
+    add_compile_options(-Wall -Wextra -Werror)
+    else()
+    add_compile_options(/permissive- /W3 /WX)
+  endif()
   add_subdirectory(rlib)
   enable_testing()
 

@@ -44,10 +44,10 @@ TYPED_TEST(CrcGenericTest, CalculatesOkForZeroOrOneBytes) {
 }
 
 TYPED_TEST(CrcGenericTest, CalculatesOkForRandom512) {
-    using random_bytes_engine = std::independent_bits_engine<std::default_random_engine, CHAR_BIT, uint8_t>;
+    using random_bytes_engine = std::independent_bits_engine<std::default_random_engine, CHAR_BIT, uint16_t>;
     random_bytes_engine rbe;
     std::vector<uint8_t> data(512);
-    std::generate(begin(data), end(data), std::ref(rbe));
+    std::generate(begin(data), end(data), [&rbe](){ return static_cast<uint8_t>(rbe() >> 8);});
 
     this->CalcCompleteAndCompare(data);
 }
