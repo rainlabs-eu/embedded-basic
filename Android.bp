@@ -1,0 +1,15 @@
+/*
+ * Universal AOSP build file
+ * Available both in system and vendor
+ */
+cc_library_headers {
+    name: "librlib_embeeded_basics",
+
+    export_include_dirs: [
+        "rlib/include",
+    ],
+
+    host_supported: true,
+    vendor_available: true
+}
+
